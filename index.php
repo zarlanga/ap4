@@ -8,51 +8,87 @@
 </head>
 <body>
 
+    <h1>Generador de archivos de ejercicios</h1>
+
+    <form action="#" method="post">
+        <input type="text" name="nombre" id="" placeholder="nombre del alumno" required>
+        <br>
+        <br>
+        <input type="number" name="nro_tp" id="" min="1" max="30" step="1" placeholder="numero de tp" required>
+        <br>
+        <br>
+        <input type="number" name="total_ej" id="" min="1" max="10" step="1" placeholder="cantidad de ejercicios" required>
+        <br>
+        <br>
+        <input type="submit" value="Generar archivos">
+    
+    </form>
+    <br>
+    <br>
     
     <?php
-    //crear formulario 
-//ubicar los archivos nuevos en tpx-nombre
-//corregir las llamadas a inclu dentro de la plantilla o copiar los archivos a la carpeta
-//recibir el formulario y validar
+    
+//copiar a la carpeta funciones.php? y el navcreator.php?
 //pasarlo a objeto?
-//hacer que no cree los archivos si ya existen
 //hacer el ejercicio propiamente dicho lol XD
 
+    if(!$_POST) {
+        echo "no se ha recibido formulario<br>";
+    } else {
 
-$origen = "plantilla.php";
-
-
-$file = fopen($origen, "r");
-
-$nombre = "Roberto Zitto";
-$total_ej = 5;
-$nro_tp = 4;
-$plantilla = fread($file, filesize($origen ) );
+        $origen = "inclu/plantilla.php"; //deberia cambiarlo a txt para que no tire error?
 
 
-for ($ej = 1; $ej <= $total_ej; $ej++){
-    $pepe = $plantilla;
-    
-    $buscar = array("**nombre**",
-        "**nro_tp**",
-        "**nro_ej**",
-        "**total_ej**");
+        $file = fopen($origen, "r");
 
-    $reemplazar = array($nombre,
-        $nro_tp,
-        $ej,
-        $total_ej);
+        [$nombre, $nro_tp, $total_ej] = array($_POST["nombre"], $_POST["nro_tp"], $_POST["total_ej"]);
+        
+        $total_ej = $total_ej <= 10 ? $total_ej : 10; //verificar que no cree mas de 10 archivos
+        
+        //reemplazar los espacios por guion bajo? ahora anda y me da miedo cambiarlo
+        
+        /*
+        $nombre = "Roberto Zitto";
+        $total_ej = 5;
+        $nro_tp = 4;
+        */
 
-    $pepe = str_replace($buscar, $reemplazar, $pepe);
+        $plantilla = fread($file, filesize($origen ) );
 
-    $nuevoarchivo = "ej_$ej.php";
-    //estosevadescontrolarrr
-    $aveh = fopen($nuevoarchivo, "x+" ) or die ("pasaron cosas");
+        $carpeta = "$nombre-tp-$nro_tp";
 
-    fwrite($aveh, $pepe);
-}
+        if (!file_exists($carpeta)) {
+            mkdir($carpeta, 0777, true);
+        }
 
-echo "no exploto";
+
+        for ($ej = 1; $ej <= $total_ej; $ej++){
+            $pepe = $plantilla;
+            
+            $buscar = array("**nombre**",
+                "**nro_tp**",
+                "**nro_ej**",
+                "**total_ej**");
+
+            $reemplazar = array($nombre,
+                $nro_tp,
+                $ej,
+                $total_ej);
+
+            $pepe = str_replace($buscar, $reemplazar, $pepe);
+            
+
+            $nuevoarchivo = "$carpeta/ej_$ej.php";
+            //estosevadescontrolarrr
+            $aveh = fopen($nuevoarchivo, "x+" ) or die ("<br>ARCHIVO YA EXISTENTE O NO HAY ACCESO");
+
+            fwrite($aveh, $pepe);
+           
+        }
+
+        echo "<a href='" . $carpeta . "/ej_1.php' > ir a ejercicio 1 </a>";
+
+    }
     ?>
 
 </body>
