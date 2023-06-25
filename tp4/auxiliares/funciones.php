@@ -1,7 +1,7 @@
 <?php
 echo  "pepe";
 $ca = "";
-function validar(&$ca = $ca) {
+function validar($ca) {
     if($_POST && $_POST["cadena"] ) {
         $cad = $_POST["cadena"];
         return true;

@@ -1,4 +1,14 @@
 <?php
+
+//crear formulario 
+//ubicar los archivos nuevos en tpx-nombre
+//corregir las llamadas a inclu dentro de la plantilla o copiar los archivos a la carpeta
+//recibir el formulario y validar
+//pasarlo a objeto?
+//hacer que no cree los archivos si ya existen
+//hacer el ejercicio propiamente dicho lol XD
+
+
 $origen = "plantilla.php";
 
 
@@ -13,10 +23,10 @@ $plantilla = fread($file, filesize($origen ) );
 for ($ej = 1; $ej <= $total_ej; $ej++){
     $pepe = $plantilla;
     
-    $buscar = array("**nombre**",
-        "**nro_tp**",
-        "**nro_ej**",
-        "**total_ej**");
+    $buscar = array("\/*nombre*\/",
+        "\/*nro_tp*\/",
+        "\/*nro_ej*\/",
+        "\/*total_ej*\/");
 
     $reemplazar = array($nombre,
         $nro_tp,
